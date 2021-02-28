@@ -6,12 +6,6 @@ from database import create_tables
 
 app = Flask(__name__)
 
-# @app.route('/games', methods=["GET"])
-# def get_games():
-#     games = game_controller.get_games()
-    
-#     return jsonify(games)
-
 
 
 @app.route('/<audioFileType>', methods=["GET"])
@@ -23,7 +17,7 @@ def get_audiofiles(audioFileType):
 
 
 @app.route("/<audioFileType>/<audioFileID", methods=["GET"])
-def get_audiofile_by_id(audioFileType, audioFileID):
+def get_audiofile_by_id_type(audioFileType, audioFileID):
     
     audiofile = audioserver.get_by_id_type(audioFileID, audioFileType)
     

@@ -9,8 +9,6 @@ Created on Sun Feb 28 13:24:04 2021
 from database import get_db
 
 
-
-
 # def insert_data(name, price, rate):
 #     database = get_db()
 #     cursor = database.cursor()
