@@ -11,14 +11,14 @@ from database import get_db
 
 
 
-def insert_data(name, price, rate):
-    database = get_db()
-    cursor = database.cursor()
-    statement = "INSERT INTO games(name, price, rate) VALUES (?, ?, ?)"
-    cursor.execute(statement, [name, price, rate])
-    database.commit()
+# def insert_data(name, price, rate):
+#     database = get_db()
+#     cursor = database.cursor()
+#     statement = "INSERT INTO games(name, price, rate) VALUES (?, ?, ?)"
+#     cursor.execute(statement, [name, price, rate])
+#     database.commit()
     
-    return True
+#     return True
 
 
 
@@ -34,41 +34,27 @@ def insert_data(audioFileType, ):
 
 
 
-
-
-
-
-
-
-
-
-def update_data(id, name, price, rate):
-    database = get_db()
-    cursor = database.cursor()
-    statement = "UPDATE games SET name=?, price=?, rate=? WHERE id=?"
-    cursor.execute(statement, [name, price, rate, id])
-    database.commit()
-    
-    return True
-
-
-def delete_data(id):
-    database = get_db()
-    cursor = database.cursor()
-    statement = "DELETE FROM games WHERE id=?"
-    cursor.execute(statement, [id])
-    database.commit()
-    
-    return True
-
-
-# def get_by_id(id):
+# def update_data(id, name, price, rate):
 #     database = get_db()
 #     cursor = database.cursor()
-#     statement = "SELECT id, name, price, rate FROM games WHERE id=?"
-#     cursor.execute(statement, [id])
+#     statement = "UPDATE games SET name=?, price=?, rate=? WHERE id=?"
+#     cursor.execute(statement, [name, price, rate, id])
+#     database.commit()
     
-#     return cursor.fetchone()
+#     return True
+
+
+
+def delete_data(audioFileType, audioFileID):
+    database = get_db()
+    cursor = database.cursor()
+    query = "DELETE FROM table=? WHERE id=?"
+    cursor.execute(query, [audioFileType, audioFileID])
+    database.commit()
+
+    return True
+
+
 
 def get_by_id_type(_id,_type):
     database = get_db()
@@ -79,13 +65,7 @@ def get_by_id_type(_id,_type):
     return cursor.fetchone()
 
 
-# def get_games():
-#     database = get_db()
-#     cursor = database.cursor()
-#     query = "SELECT id, name, price, rate FROM games"
-#     cursor.execute(query)
-    
-#     return cursor.fetchall()
+
     
 def get_audiofiles(audioFileType):
     database = get_db()
@@ -94,23 +74,6 @@ def get_audiofiles(audioFileType):
     cursor.execute(query)
     
     return cursor.fetchall()
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
