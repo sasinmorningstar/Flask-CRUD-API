@@ -6,7 +6,7 @@ from app import db
 class Song(db.Model):
 
     '''This class represents the song table'''
-    # __tablename__ = 'Song'
+    
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
@@ -30,7 +30,9 @@ class Song(db.Model):
     #     db.session.commit()
 
 class Podcast(db.Model):
+    
     '''This class represents the Podcast table'''
+    
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     duration = db.Column(db.Integer)
@@ -38,7 +40,13 @@ class Podcast(db.Model):
     host = db.Column(db.String(100))
     participants = db.Column(db.String)
 
+
+
+
 class Audiobook(db.Model):
+    
+    '''This class represents the Audiobook table'''
+    
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
     author = db.Column(db.String(100))

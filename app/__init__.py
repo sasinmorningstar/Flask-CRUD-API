@@ -1,9 +1,9 @@
 
-from flask import Flask, request, jsonify, json
+from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import reqparse
 from datetime import datetime
-# import json
+import json
 
 # Initialize sql-alchemy
 db = SQLAlchemy()
@@ -38,14 +38,18 @@ def create_app():
 
     # app = create_app()
 
-    from app.models import Song
+    from app.models import Song, Podcast, Audiobook
 
     @app.route('/', methods=['GET'])
     def server_status():
-        response = jsonify(Server="Running")
-        response.status_code = 200
+        response = {'Server': 'Running'}
+        # response.status_code = 200
 
-        return response
+        return (
+            json.dumps(response, default=str),
+            200,
+            {'Content-Type': "application/json"}
+            )
 
 
 
@@ -68,9 +72,13 @@ def create_app():
                         }
                     results.append(_object)
 
-                response = jsonify(results)
-                response.status_code = 200
-                return response
+                # response = jsonify(results)
+                # response.status_code = 200
+                return (
+                    json.dumps(results, default=str),
+                    200,
+                    {'Content-Type': "application/json"}
+                    )
             # GET all the Podcast table information from this get method using Api
             if audioFileType=='Podcast':
                 podcasts = Podcast.query.all()
@@ -87,9 +95,13 @@ def create_app():
                         }
                     results.append(_object)
 
-                response = jsonify(results)
-                response.status_code = 200
-                return response
+                # response = jsonify(results)
+                # response.status_code = 200
+                return (
+                    json.dumps(results, default=str),
+                    200,
+                    {'Content-Type': "application/json"}
+                    )
 
             # GET all the Audiobook table information from this get method using Api
             if audioFileType=='Audiobook':
@@ -107,9 +119,13 @@ def create_app():
                         }
                     results.append(_object)
 
-                response = jsonify(results)
-                response.status_code = 200
-                return response
+                # response = jsonify(results)
+                # response.status_code = 200
+                return (
+                    json.dumps(results, default=str),
+                    200,
+                    {'Content-Type': "application/json"}
+                    )
 
 
         if request.method=='POST':
@@ -127,15 +143,19 @@ def create_app():
                 db.session.add(song)
                 db.session.commit()
 
-                response = jsonify({
+                response = {
                     'id': song.id,
                     'name': song.name,
                     'duration': song.duration,
                     'upload_time': song.upload_time
-                    })
-                response.status_code = 201
+                    }
+                # response.status_code = 201
 
-                return response
+                return (
+                    json.dumps(response, default=str),
+                    201,
+                    {'Content-Type': "application/json"}
+                    )
 
             # POST the data Podcast table  from this post method using Api
             if audioFileType=='Podcast':
@@ -150,17 +170,21 @@ def create_app():
                 db.session.add(podcast)
                 db.session.commit()
 
-                response = jsonify({
+                response = {
                     'id': podcast.id,
                     'name': podcast.name,
                     'duration': podcast.duration,
                     'upload_time': podcast.upload_time,
                     'host': podcast.host,
                     'participants': podcast.participants
-                    })
-                response.status_code = 201
+                    }
+                # response.status_code = 201
 
-                return response
+                return (
+                    json.dumps(response, default=str),
+                    201,
+                    {'Content-Type': "application/json"}
+                    )
 
             # POST the data Audiobook table  from this post method using Api
             if audioFileType=='Audiobook':
@@ -175,15 +199,21 @@ def create_app():
                 db.session.add(audiobook)
                 db.session.commit()
 
-                response = jsonify({
+                response = {
                     'id': audiobook.id,
                     'title': audiobook.title,
                     'author': audiobook.author,
                     'narrator': audiobook.narrator,
                     'duration': audiobook.duration,
                     'upload_time': audiobook.upload_time
-                    })
-                response.status_code = 201
+                    }
+                # response.status_code = 201
+                
+                return (
+                    json.dumps(response, default=str),
+                    201,
+                    {'Content-Type': "application/json"}
+                    )
 
 
     @app.route('/<audioFileType>/<audioFileID>', methods=['GET','PUT','DELETE'])
@@ -194,59 +224,97 @@ def create_app():
         if request.method=='GET' and audioFileType=='Song':
             song = Song.query.filter_by(id=audioFileID).first()
             if not song:
-                return {"message":"Song id does not found"}, 404
-            response = jsonify({
+                response = {"message":"Song id not found"}
+                
+                return (
+                    json.dumps(response),
+                    404,
+                    {'Content-Type': "application/json"}
+                    )
+            response = {
                 'id': song.id,
                 'name': song.name,
                 'duration': song.duration,
                 'upload_time': song.upload_time
-                })
-            response.status_code = 200
+                }
+            # response.status_code = 200
 
-            return response
+            return (
+                    json.dumps(response, default=str),
+                    200,
+                    {'Content-Type': "application/json"}
+                    )
 
 
         # Get method for get the Podcast information from Api call using podcast_id filter
         if request.method=='GET' and audioFileType=='Podcast':
             podcast = Podcast.query.filter_by(id=audioFileID).first()
             if not podcast:
-                return {"message":"Podcast id does not found"}, 404
-            response = jsonify({
+                message = {"message":"Podcast id not found"}
+                
+                return (
+                    json.dumps(message, default=str),
+                    404,
+                    {'Content-Type': "application/json"}
+                    )
+            
+            response = {
                 'id': podcast.id,
                 'name': podcast.name,
                 'duration': podcast.duration,
                 'upload_time': podcast.upload_time,
                 'host': podcast.host,
                 'participants': podcast.participants
-                })
-            response.status_code = 200
+                }
+            # response.status_code = 200
 
-            return response
+            return (
+                    json.dumps(response, default=str),
+                    200,
+                    {'Content-Type': "application/json"}
+                    )
 
 
         # Get method for get the Audiobook information from Api call using audiobook_id filter
         if request.method=='GET' and audioFileType=='Audiobook':
             audiobook = Audiobook.query.filter_by(id=audioFileID).first()
             if not audiobook:
-                return {"message":"Audiobook id does not found"}, 404
-            response = jsonify({
+                message = {"message":"Audiobook id not found"}
+                
+                return (
+                    json.dumps(message, default=str),
+                    404,
+                    {'Content-Type': "application/json"}
+                    )
+            
+            response = {
                 'id': audiobook.id,
                 'title': audiobook.title,
                 'author': audiobook.author,
                 'narrator': audiobook.narrator,
                 'duration': audiobook.duration,
                 'upload_time': audiobook.upload_time
-                })
-            response.status_code = 200
+                }
+            # response.status_code = 200
 
-            return response
+            return (
+                    json.dumps(response, default=str),
+                    200,
+                    {'Content-Type': "application/json"}
+                    )
 
         # PUT method for updating the data in the Song table filter by song_id
         if request.method=='PUT' and audioFileType=='Song':
             data = song_update_args.parse_args()
             song = Song.query.filter_by(id=audioFileID).first()
             if not song:
-                return {"message":"Song id does not found"}, 404
+                message = {"message":"Song id not found"}
+                
+                return (
+                    json.dumps(message, default=str),
+                    404,
+                    {'Content-Type': "application/json"}
+                    )
             if data['name']:
                 song.name = data['name']
             if data['duration']:
@@ -254,19 +322,28 @@ def create_app():
             if data['upload_time']:
                 song.upload_time = data['upload_time']
             db.session.commit()
-            response = jsonify({
+            response = {
                 'name': song.name,
                 'duration': song.duration
-                })
-            response.status_code = 200
-            return response
+                }
+            # response.status_code = 200
+            return (
+                    json.dumps(response, default=str),
+                    200,
+                    {'Content-Type': "application/json"}
+                    )
 
         # PUT method for updating the data in the Podcast table filter by podcast_id
         if request.method=='PUT' and audioFileType=='Podcast':
             data = podcast_update_args.parse_args()
             podcast = Podcast.query.filter_by(id=audioFileID).first()
             if not podcast:
-                return {"message":"Podcast id does not found"}, 404
+                message = {"message":"Podcast id not found"}
+                return (
+                    json.dumps(message, default=str),
+                    404,
+                    {'Content-Type': "application/json"}
+                    )
             if data['name']:
                 podcast.name = data['name']
             if data['duration']:
@@ -278,23 +355,32 @@ def create_app():
             if data['participants']:
                 podcast.participants = data['participants']
             db.session.commit()
-            response = jsonify({
+            response = {
                 'id': podcast.id,
                 'name': podcast.name,
                 'duration': podcast.duration,
                 'upload_time': podcast.upload_time,
                 'host': podcast.host,
                 'participants': podcast.participants
-                })
-            response.status_code = 200
-            return response
+                }
+            # response.status_code = 200
+            return (
+                    json.dumps(response, default=str),
+                    200,
+                    {'Content-Type': "application/json"}
+                    )
 
         # PUT method for updating the data in the Audiobook table filter by audiobook_id
         if request.method=='PUT' and audioFileType=="Audiobook":
             data = audiobook_update_args.parse_args()
             audiobook = Audiobook.query.filter_by(id=audioFileID).first()
             if not audiobook:
-                return {"message":"Podcast id does not found"}, 404
+                message = {"message":"Audiobook id not found"}
+                return (
+                    json.dumps(message, default=str),
+                    404,
+                    {'Content-Type': "application/json"}
+                    )
             if data['title']:
                 audiobook.title = data['title']
             if data['author']:
@@ -306,49 +392,84 @@ def create_app():
             if data['upload_time']:
                 audiobook.upload_time = data['upload_time']
             db.session.commit()
-            response = jsonify({
+            response = {
                 'id': audiobook.id,
                 'title': audiobook.title,
                 'author': audiobook.author,
                 'narrator': audiobook.narrator,
                 'duration': audiobook.duration,
                 'upload_time': audiobook.upload_time
-                })
-            response.status_code = 200
-            return response
+                }
+            # response.status_code = 200
+            return (
+                    json.dumps(response, default=str),
+                    200,
+                    {'Content-Type': "application/json"}
+                    )
 
 
         # DELETE method for delete the Song information from Api call using song_id filter
         if request.method=='DELETE' and audioFileType=='Song':
             data = Song.query.filter_by(id=audioFileID).first()
             if not data:
-                return {"message":"Song id does not found"}, 404
+                message = {"message":"Song id not found"}
+                
+                return (
+                    json.dumps(message, default=str),
+                    404,
+                    {'Content-Type': "application/json"}
+                    )
             db.session.delete(data)
             db.session.commit()
 
-            return {"message": "song {} deleted successfully".format(audioFileID)}, 200
+            message = {"message": "song {} deleted successfully".format(audioFileID)}
+            return (
+                    json.dumps(message, default=str),
+                    200,
+                    {'Content-Type': "application/json"}
+                    )
 
         # Delete method for delete the Podcast information from Api call using podcast_id filter
         if request.method=='DELETE' and audioFileType=='Podcast':
             data = Podcast.query.filter_by(id=audioFileID).first()
             if not data:
-                return {"message":"Podcast id does not found"}, 404
-
+                message = {"message":"Podcast id not found"}
+                return (
+                    json.dumps(message, default=str),
+                    404,
+                    {'Content-Type': "application/json"}
+                    )
             db.session.delete(data)
             db.session.commit()
 
-            return {"message": "podcast {} deleted successfully".format(audioFileID)}, 200
+            message = {"message": "podcast {} deleted successfully".format(audioFileID)}
+            return (
+                    json.dumps(message, default=str),
+                    200,
+                    {'Content-Type': "application/json"}
+                    )
+            
 
         # Delete method for delete the Audiobook information from Api call using audiobook_id filter
         if request.method=='DELETE' and audioFileType=='Audiobook':
             data = Audiobook.query.filter_by(id=audioFileID).first()
             if not data:
-                return {"message":"Audiobook id does not found"}, 404
+                message = {"message":"Audiobook id not found"}
+                return (
+                    json.dumps(message, default=str),
+                    404,
+                    {'Content-Type': "application/json"}
+                    )
 
             db.session.delete(data)
             db.session.commit()
 
-            return {"message": "Audiobook {} deleted successfully".format(audioFileID)}, 200
+            message = {"message": "Audiobook {} deleted successfully".format(audioFileID)}
+            return (
+                    json.dumps(message, default=str),
+                    200,
+                    {'Content-Type': "application/json"}
+                    )
 
 
     return app

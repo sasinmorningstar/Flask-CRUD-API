@@ -176,10 +176,25 @@ def get_update_delete_data(audioFileType, audioFileID):
 # put.status_code
 
 
-# import requests
-# post = requests.post('http://localhost:5000/Song', json={"name":"Cry", "duration":"450s"})
+import requests
+post = requests.post('http://localhost:5000/Song', json={"name":"Cry", "duration":"450s"})
 
-# post.status_code
+post.status_code
+
+
+
+import requests
+post = requests.post('http://localhost:5000/Audiobook/', json={'title': 'Origin', 'author':'Dan Brown', 'narrator': 'Paul Michael', 'duration': 65400})
+
+post.status_code
+
+
+import requests
+post = requests.post('http://localhost:5000/Podcast/', json={'name':'On Purpose', 'duration': 1350, 'host':'Jay Shetty', 'participants': 'Kobe Bryant'})
+
+post.status_code
+
+
 
 
 # import requests

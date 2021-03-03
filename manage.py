@@ -3,7 +3,7 @@
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from app import db, create_app
-from app.models import Song
+from app.models import Song, Podcast, Audiobook
 
 app = create_app()
 migrate = Migrate(app, db)
